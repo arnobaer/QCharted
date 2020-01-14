@@ -496,22 +496,23 @@ class Chart(QtChart.QChart):
                     series.replace(points) # assign a generator object
 
 class ChartView(QtChart.QChartView):
-    """Custom chart view class."""
+    """Custom chart view class providing a toolbar and points marker and a
+    default chart instance on creation.
+    """
 
     MarkerRadius = 16
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__(Chart(), parent)
         self.__createToolbar()
         self.setMarkerEnabled(False)
         self.setRubberBand(QtChart.QChartView.RectangleRubberBand)
         self.setMarker(MarkerGraphicsItem())
         # Store mouse pressed state
         self.__mousePressed = False
-        # Create default chart
-        self.setChart(Chart())
 
     def __createToolbar(self):
+        # Create toolbar widget without parent, see below.
         self.__toolbar = Toolbar()
         self.__toolbar.viewAll.connect(lambda: self.chart().fit())
         self.__toolbar.fitHorizontal.connect(lambda: self.chart().fitHorizontal())
@@ -520,6 +521,8 @@ class ChartView(QtChart.QChartView):
         proxyWidget = self.scene().addWidget(self.__toolbar)
         proxyWidget.setPos(0, 0)
         proxyWidget.setZValue(10000)
+        # Set parent after adding widget to scene to trigger
+        # widgets destruction on close of chart view.
         self.__toolbar.setParent(self)
 
     def toolbar(self):
