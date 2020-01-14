@@ -2,15 +2,13 @@ import random
 import sys
 
 from PyQt5 import QtCore, QtWidgets
-from QCharted import ChartView
+from QCharted import Chart, ChartView
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
 
-    view = ChartView()
-    view.resize(800, 600)
-
-    chart = view.chart()
+    # Create chart
+    chart = Chart()
     chart.legend().setAlignment(QtCore.Qt.AlignBottom)
 
     x = chart.addDateTimeAxis(QtCore.Qt.AlignBottom)
@@ -31,8 +29,13 @@ def main():
     temp.data().replace([(i, random.uniform(22, 25)) for i in range(32)])
     humid.data().replace([(i, random.uniform(50, 55)) for i in range(32)])
 
-    view.show()
     chart.fit()
+
+    # Create chart view
+    view = ChartView()
+    view.setChart(chart)
+    view.resize(800, 600)
+    view.show()
 
     app.exec_()
 

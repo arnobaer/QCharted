@@ -9,7 +9,7 @@ import numpy as np
 import namegenerator
 
 from PyQt5 import QtCore, QtWidgets
-from QCharted import DataSeries, ChartView
+from QCharted import DataSeries, Chart, ChartView
 
 class FakeDataSeries(DataSeries):
 
@@ -88,13 +88,8 @@ def main():
 
     app = QtWidgets.QApplication(sys.argv)
 
-    # Create view
-    view = ChartView()
-    view.setWindowTitle("{} x {} Samples".format(args.count, args.samples))
-    view.resize(900, 600)
-
-    # Configure chart
-    chart = view.chart()
+    # Create chart
+    chart = Chart()
     chart.setResolution(args.resolution)
     chart.legend().setAlignment(QtCore.Qt.AlignRight)
 
@@ -120,7 +115,11 @@ def main():
     thread = SourceThread(chart)
     thread.start()
 
-    # Show window
+    # Create chart view
+    view = ChartView()
+    view.setChart(chart)
+    view.setWindowTitle("{} x {} Samples".format(args.count, args.samples))
+    view.resize(900, 600)
     view.show()
 
     # Run application loop

@@ -9,7 +9,7 @@ Currently supports `LineSeries`, `SplineSeries` and `ScatterSeries`.
 Install using pip.
 
 ```bash
-pip install git+https://github.com/arnobaer/QCharted.git@1.0.0
+pip install git+https://github.com/arnobaer/QCharted.git@1.1.0
 ```
 
 Create a plot widget, assign two axes and some line series.
@@ -17,12 +17,12 @@ Create a plot widget, assign two axes and some line series.
 ```python
 import sys
 from PyQt5 import QtCore, QtWidgets
-from QCharted import ChartView
+from QCharted import Chart, ChartView
 
 app = QtWidgets.QApplication(sys.argv)
 
-view = ChartView()
-chart = view.chart()
+# Create chart
+chart = Chart()
 
 # Create multiple axis
 x = chart.addDateTimeAxis(QtCore.Qt.AlignBottom)
@@ -46,8 +46,12 @@ humid.data().replace([(0, 50.3), (1, 51.1)])
 temp.data().append(2, 22.1)
 humid.data().append(2, 51.0)
 
-# Show and fit to extent
+# Create chart view
+view = ChartView()
+view.setChart(chart)
 view.show()
+
+# Fit to extent
 chart.fit()
 
 app.exec_()
