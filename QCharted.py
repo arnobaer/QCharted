@@ -7,7 +7,7 @@ import re
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets, QtChart
 
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
 __all__ = ['ChartView', 'Chart']
 
@@ -392,6 +392,8 @@ class Chart(QtChart.QChart):
 
     def __init__(self):
         super().__init__()
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.setBackgroundRoundness(0)
         self.setResolution(800)
 
     def resolution(self):
@@ -499,23 +501,26 @@ class ChartView(QtChart.QChartView):
     MarkerRadius = 16
 
     def __init__(self, parent=None):
-        super().__init__(Chart(), parent)
+        super().__init__(parent)
         self.__createToolbar()
-        self.chart().layout().setContentsMargins(0, 0, 0, 0)
-        self.chart().setBackgroundRoundness(0)
         self.setMarkerEnabled(False)
         self.setRubberBand(QtChart.QChartView.RectangleRubberBand)
         self.setMarker(MarkerGraphicsItem())
         # Store mouse pressed state
         self.__mousePressed = False
+        # Create default chart
+        self.setChart(Chart())
 
     def __createToolbar(self):
-        self.__toolbar = Toolbar(self)
-        self.__toolbar.viewAll.connect(self.chart().fit)
-        self.__toolbar.fitHorizontal.connect(self.chart().fitHorizontal)
-        self.__toolbar.fitVertical.connect(self.chart().fitVertical)
+        self.__toolbar = Toolbar()
+        self.__toolbar.viewAll.connect(lambda: self.chart().fit())
+        self.__toolbar.fitHorizontal.connect(lambda: self.chart().fitHorizontal())
+        self.__toolbar.fitVertical.connect(lambda: self.chart().fitVertical())
         self.__toolbar.toggleMarker.connect(self.setMarkerEnabled)
-        self.scene().addWidget(self.__toolbar).setPos(0, 0)
+        proxyWidget = self.scene().addWidget(self.__toolbar)
+        proxyWidget.setPos(0, 0)
+        proxyWidget.setZValue(10000)
+        self.__toolbar.setParent(self)
 
     def toolbar(self):
         return self.__toolbar
@@ -526,7 +531,7 @@ class ChartView(QtChart.QChartView):
     def setMarker(self, item):
         self.__marker = item
         item.setZValue(100)
-        self.chart().scene().addItem(item)
+        self.scene().addItem(item)
 
     def setMarkerEnabled(self, enabled):
         self.__setMarkerEnabled = enabled
