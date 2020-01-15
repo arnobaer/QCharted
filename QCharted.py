@@ -7,7 +7,7 @@ import re
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets, QtChart
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 __all__ = ['ChartView', 'Chart']
 
@@ -472,6 +472,8 @@ class Chart(QtChart.QChart):
         for axis in self.axes(QtCore.Qt.Vertical):
             if isinstance(axis, QtChart.QDateTimeAxis):
                 axis.setRange(toDateTime(bounds[1][0]), toDateTime(bounds[1][1]))
+            elif isinstance(axis, QtChart.QCategoryAxis):
+                axis.setRange(axis.min(), axis.max())
             else:
                 axis.setRange(bounds[1][0], bounds[1][1])
 

@@ -9,7 +9,7 @@ Currently supports `LineSeries`, `SplineSeries` and `ScatterSeries`.
 Install using pip.
 
 ```bash
-pip install git+https://github.com/arnobaer/QCharted.git@1.1.0
+pip install git+https://github.com/arnobaer/QCharted.git@1.1.1
 ```
 
 Create a plot widget, assign two axes and some line series.
