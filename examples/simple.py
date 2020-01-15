@@ -18,6 +18,11 @@ def main():
     y2 = chart.addValueAxis(QtCore.Qt.AlignRight)
     y2.setTitleText("Humid [%rH]")
     y2.setLinePenColor(QtCore.Qt.blue)
+    y3 = chart.addCategoryAxis(QtCore.Qt.AlignRight)
+    y3.setTitleText("State")
+    y3.append("Off", .5)
+    y3.append("On", 1)
+    y3.setLinePenColor(QtCore.Qt.green)
 
     temp = chart.addLineSeries(x, y1)
     temp.setName("Temp")
@@ -25,9 +30,13 @@ def main():
     humid = chart.addLineSeries(x, y2)
     humid.setName("Humid")
     humid.setPen(QtCore.Qt.blue)
+    program = chart.addLineSeries(x, y3)
+    program.setName("State")
+    program.setPen(QtCore.Qt.green)
 
     temp.data().replace([(i, random.uniform(22, 25)) for i in range(32)])
     humid.data().replace([(i, random.uniform(50, 55)) for i in range(32)])
+    program.data().replace([(i, v) for i, v in enumerate([0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0])])
 
     chart.fit()
 
