@@ -1,13 +1,11 @@
-import numpy as np
-
 import math
-import threading
 import re
 
 import numpy as np
+
 from PyQt5 import QtCore, QtGui, QtWidgets, QtChart
 
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 
 __all__ = ['ChartView', 'Chart']
 
@@ -156,8 +154,8 @@ class DateTimeAxis(QtChart.QDateTimeAxis):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Default multi-line label with indented time
-        indent = '&#160;' * 6
-        self.setFormat('dd-MM-yyyy<br/>{}hh:mm'.format(indent))
+        indent = '&#160;' * 3
+        self.setFormat('dd-MM-yyyy<br/>{}hh:mm:ss'.format(indent))
 
 class CategoryAxis(QtChart.QCategoryAxis):
     """Custom category axis."""
@@ -461,21 +459,27 @@ class Chart(QtChart.QChart):
 
     def fitHorizontal(self):
         bounds = self.bounds()
+        a, b = bounds[0][0], bounds[0][1]
+        if a == b:
+            b = b + 1.0
         for axis in self.axes(QtCore.Qt.Horizontal):
             if isinstance(axis, QtChart.QDateTimeAxis):
-                axis.setRange(toDateTime(bounds[0][0]), toDateTime(bounds[0][1]))
+                axis.setRange(toDateTime(a), toDateTime(b))
             else:
-                axis.setRange(bounds[0][0], bounds[0][1])
+                axis.setRange(a, b)
 
     def fitVertical(self):
         bounds = self.bounds()
+        a, b = bounds[1][0], bounds[1][1]
+        if a == b:
+            b = b + 1.0
         for axis in self.axes(QtCore.Qt.Vertical):
             if isinstance(axis, QtChart.QDateTimeAxis):
-                axis.setRange(toDateTime(bounds[1][0]), toDateTime(bounds[1][1]))
+                axis.setRange(toDateTime(a), toDateTime(b))
             elif isinstance(axis, QtChart.QCategoryAxis):
                 axis.setRange(axis.min(), axis.max())
             else:
-                axis.setRange(bounds[1][0], bounds[1][1])
+                axis.setRange(a, b)
 
     def fit(self):
         self.zoomReset()
