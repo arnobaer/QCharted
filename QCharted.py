@@ -5,25 +5,25 @@ import numpy as np
 
 from PyQt5 import QtCore, QtGui, QtWidgets, QtChart
 
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 
 __all__ = ['ChartView', 'Chart']
 
-milliseconds = 1000.
+milliseconds = 1e3
 
-def toDateTime(seconds):
+def toDateTime(seconds: float) -> QtCore.QDateTime:
     """Returns seconds as QDateTime object."""
-    return QtCore.QDateTime.fromMSecsSinceEpoch(seconds * milliseconds)
+    return QtCore.QDateTime.fromMSecsSinceEpoch(int(seconds * milliseconds))
 
-def toSecs(datetime):
+def toSecs(datetime: QtCore.QDateTime) -> float:
     """Returns QDateTime object as seconds."""
     return datetime.toMSecsSinceEpoch() / milliseconds
 
-def toMSecs(seconds):
+def toMSecs(seconds: float) -> int:
     """Returns QDateTime object as milli seconds."""
-    return seconds * milliseconds
+    return int(seconds * milliseconds)
 
-def stripHtml(html):
+def stripHtml(html: str) -> str:
     html = re.sub(r'<[^>]+>', ' ', html)
     html = re.sub(r'&[^;]*;', ' ', html)
     html = re.sub(r'\s+', ' ', html)
