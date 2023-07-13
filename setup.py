@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='QCharted',
-    version='1.1.2',
+    version='1.1.3',
     author="Bernhard Arnold",
     author_email="bernhard.arnold@oeaw.ac.at",
     url = "https://github.com/arnobaer/QCharted",
